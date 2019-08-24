@@ -1,16 +1,28 @@
-<template>
+<template functional>
   <div class="text-white cal--head">
     <div
       class="row bg-red-8 text-center justify-center items-center rounded-borders-top-12"
     >
       <div class="col-auto">
-        <q-btn icon="keyboard_arrow_left" flat round class="q-ma-sm" />
+        <q-btn
+          icon="keyboard_arrow_left"
+          flat
+          round
+          class="q-ma-sm"
+          @click="listeners['change-month']('prev')"
+        />
       </div>
       <div colspan="5" class="col cal--month">
-        {{ month }}
+        {{ props.month }}
       </div>
       <div class="col-auto">
-        <q-btn icon="keyboard_arrow_right" flat round class="q-ma-sm" />
+        <q-btn
+          icon="keyboard_arrow_right"
+          flat
+          round
+          class="q-ma-sm"
+          @click="listeners['change-month']('next')"
+        />
       </div>
     </div>
     <div class="row text-strong text-body2 q-py-sm bg-red-10">

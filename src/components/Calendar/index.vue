@@ -1,28 +1,24 @@
 <template>
   <div class="q-pa-sm cal">
     <div class="shadow-3">
-      <calendar-head :month="currentMonthYear" />
+      <calendar-head
+        :month="currentMonthYear"
+        @change-month="handleChangeMonth"
+      />
 
-      <div class="row bg-white q-py-sm rounded-borders-bottom-12">
-        <div class="col text-center ellipsis">1</div>
-        <div class="col text-center ellipsis">2</div>
-        <div class="col text-center ellipsis">3</div>
-        <div class="col text-center ellipsis">4</div>
-        <div class="col text-center ellipsis">5</div>
-        <div class="col text-center ellipsis">6</div>
-        <div class="col text-center ellipsis">7</div>
-      </div>
+      <calendar-body />
     </div>
   </div>
 </template>
 
 <script>
 import CalendarHead from "./CalendarHead"
+import CalendarBody from "./CalendarBody"
 import { mapGetters } from "vuex"
 
 export default {
   name: "Calendar",
-  components: { CalendarHead },
+  components: { CalendarHead, CalendarBody },
   data() {
     return {}
   },
@@ -31,14 +27,15 @@ export default {
       currentMonthYear: "calendar/currentMonthYear",
     }),
   },
+  methods: {
+    handleChangeMonth(action) {
+      console.log(action)
+    },
+  },
 }
 </script>
 <style lang="stylus" scoped>
 .cal
   min-width 350px
   width 800px
-
-.rounded-borders-bottom-12
-  border-bottom-right-radius: 12px !important;
-  border-bottom-left-radius: 12px !important;
 </style>
