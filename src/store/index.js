@@ -1,7 +1,6 @@
 import Vue from "vue"
 import Vuex from "vuex"
-
-// import example from './module-example'
+import calendar from "./calendar"
 
 Vue.use(Vuex)
 
@@ -13,7 +12,7 @@ Vue.use(Vuex)
 export default function(/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // example
+      calendar,
     },
 
     // enable strict mode (adds overhead!)

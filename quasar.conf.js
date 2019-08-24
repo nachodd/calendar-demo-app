@@ -32,18 +32,16 @@ module.exports = function(ctx) {
 
       components: [
         "QLayout",
-        "QHeader",
-        "QDrawer",
+        "QMarkupTable",
         "QPageContainer",
         "QPage",
-        "QToolbar",
-        "QToolbarTitle",
+
         "QBtn",
         "QIcon",
-        "QList",
-        "QItem",
-        "QItemSection",
-        "QItemLabel",
+        // "QList",
+        // "QItem",
+        // "QItemSection",
+        // "QItemLabel",
       ],
 
       directives: ["Ripple"],

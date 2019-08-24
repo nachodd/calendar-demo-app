@@ -1,13 +1,16 @@
 <template>
-  <q-page class="flex flex-center">
-    <img alt="Quasar logo" src="~assets/quasar-logo-full.svg" />
+  <!-- flex-center -->
+  <q-page class="flex ">
+    <calendar />
   </q-page>
 </template>
 
 <style></style>
 
 <script>
+import Calendar from "src/components/Calendar/index"
 export default {
   name: "PageIndex",
+  components: { Calendar },
 }
 </script>
