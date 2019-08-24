@@ -6,8 +6,8 @@
           flat
           dense
           round
-          @click="leftDrawerOpen = !leftDrawerOpen"
           aria-label="Menu"
+          @click="leftDrawerOpen = !leftDrawerOpen"
         >
           <q-icon name="menu" />
         </q-btn>
@@ -112,19 +112,19 @@
 </template>
 
 <script>
-import { openURL } from "quasar";
+import { openURL } from "quasar"
 
 export default {
   name: "MyLayout",
   data() {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
-    };
+      leftDrawerOpen: this.$q.platform.is.desktop,
+    }
   },
   methods: {
-    openURL
-  }
-};
+    openURL,
+  },
+}
 </script>
 
 <style></style>
