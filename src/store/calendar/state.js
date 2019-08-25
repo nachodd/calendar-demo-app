@@ -2,7 +2,6 @@ export default {
   currentDate: new Date(),
   selectedDate: null,
   events: [],
-  // weekDays: {
-  //   ""
-  // }
+  modalEventOpen: false,
+  eventSelected: null,
 }

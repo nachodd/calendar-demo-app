@@ -9,6 +9,8 @@
       <calendar-body />
 
       <calendar-footer />
+
+      <calendar-modal />
     </div>
   </div>
 </template>
@@ -17,11 +19,12 @@
 import CalendarHead from "./CalendarHead"
 import CalendarBody from "./CalendarBody"
 import CalendarFooter from "./CalendarFooter"
+import CalendarModal from "./CalendarModal"
 import { mapGetters } from "vuex"
 
 export default {
   name: "Calendar",
-  components: { CalendarHead, CalendarBody, CalendarFooter },
+  components: { CalendarHead, CalendarBody, CalendarFooter, CalendarModal },
   data() {
     return {}
   },
@@ -32,7 +35,6 @@ export default {
   },
   methods: {
     handleChangeMonth(action) {
-      console.log(action)
       this.$store.dispatch("calendar/changeMonth", action)
     },
   },

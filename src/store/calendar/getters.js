@@ -53,3 +53,23 @@ const getDayObject = (date, events, isCurrentMonth = true) => {
     isCurrentMonth,
   }
 }
+
+export function eventsForSelectedDate(state) {
+  if (!state.selectedDate) {
+    return []
+  }
+  return state.events[state.selectedDate] || []
+}
+
+export function parsedSelectedDate(state) {
+  if (state.selectedDate) {
+    const parts = state.selectedDate.split("-")
+    const currDate = new Date(
+      parseInt(parts[0], 10),
+      parseInt(parts[1], 10) - 1,
+      parseInt(parts[2], 10),
+    )
+    return format(currDate, "eeee, LLLL do (yyyy)")
+  }
+  return ""
+}

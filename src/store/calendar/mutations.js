@@ -1,7 +1,11 @@
 import { addMonths, subMonths } from "date-fns"
 
 export function SET_SELECTED_DATE(state, newDate) {
-  state.selectedDate = newDate
+  if (newDate === state.selectedDate) {
+    state.selectedDate = null
+  } else {
+    state.selectedDate = newDate
+  }
 }
 
 export function CHANGE_MONTH(state, action) {
@@ -9,4 +13,8 @@ export function CHANGE_MONTH(state, action) {
     action === "prev"
       ? subMonths(state.currentDate, 1)
       : addMonths(state.currentDate, 1)
+}
+
+export function SET_MODAL_EVENT_OPEN(state, newVal) {
+  state.modalEventOpen = newVal
 }
