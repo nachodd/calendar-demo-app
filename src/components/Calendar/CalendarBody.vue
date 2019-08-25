@@ -29,11 +29,7 @@ export default {
   mounted() {
     console.log("currentMonthDays", this.currentMonthDays)
   },
-  methods: {
-    // getRow(rowNumber) {
-    //   return this.monthDaysChunked[rowNumber]
-    // }
-  },
+  methods: {},
 }
 </script>
 
