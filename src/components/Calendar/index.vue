@@ -1,12 +1,14 @@
 <template>
-  <div class="q-pa-sm cal">
-    <div class="shadow-3">
+  <div class="q-pa-sm cal text-unselectable">
+    <div class="shadow-3 rounded-borders-12">
       <calendar-head
         :month="currentMonthYear"
         @change-month="handleChangeMonth"
       />
 
       <calendar-body />
+
+      <calendar-footer />
     </div>
   </div>
 </template>
@@ -14,11 +16,12 @@
 <script>
 import CalendarHead from "./CalendarHead"
 import CalendarBody from "./CalendarBody"
+import CalendarFooter from "./CalendarFooter"
 import { mapGetters } from "vuex"
 
 export default {
   name: "Calendar",
-  components: { CalendarHead, CalendarBody },
+  components: { CalendarHead, CalendarBody, CalendarFooter },
   data() {
     return {}
   },
@@ -30,6 +33,7 @@ export default {
   methods: {
     handleChangeMonth(action) {
       console.log(action)
+      this.$store.dispatch("calendar/changeMonth", action)
     },
   },
 }

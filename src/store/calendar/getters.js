@@ -2,7 +2,6 @@ import {
   format,
   startOfMonth,
   isSunday,
-  isSaturday,
   subDays,
   addDays,
   getDate,
@@ -34,9 +33,8 @@ export function currentMonthDays(state) {
   }
 
   // append days until first saturday to complete the grid
-  iterableDate = subDays(iterableDate, 1) // set iterableDate to the last day added to days array
-  if (!isSaturday(iterableDate)) {
-    while (!isSaturday(iterableDate)) {
+  if (!isSunday(iterableDate)) {
+    while (!isSunday(iterableDate)) {
       days.push(getDayObject(iterableDate, state.events, false))
       iterableDate = addDays(iterableDate, 1)
     }
@@ -50,8 +48,8 @@ const getDayObject = (date, events, isCurrentMonth = true) => {
   return {
     number: getDate(date),
     fullDate: date,
-    events: events[formatedDate] || false,
-    key: formatedDate,
+    events: events[formatedDate] || [],
+    dayKey: formatedDate,
     isCurrentMonth,
   }
 }

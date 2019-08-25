@@ -1,5 +1,5 @@
 <template functional>
-  <div class="text-white cal--head">
+  <div class="text-white cal__head">
     <div
       class="row bg-red-8 text-center justify-center items-center rounded-borders-top-12"
     >
@@ -12,7 +12,7 @@
           @click="listeners['change-month']('prev')"
         />
       </div>
-      <div colspan="5" class="col cal--month">
+      <div colspan="5" class="col cal__month">
         {{ props.month }}
       </div>
       <div class="col-auto">
@@ -49,11 +49,11 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.cal--month
+.cal__month
   font-size: 2.5rem;
   font-weight: 400;
 
-.cal--head > .row
+.cal__head > .row
   height auto !important
 
 .rounded-borders-top-12

@@ -1,8 +1,12 @@
 <template>
   <div>
-    <div class="bg-white rounded-borders-bottom-12">
-      <div v-for="row in [1, 2, 3, 4, 5]" :key="`cal_row_${row}`" class="row">
-        <calendar-day v-for="day in monthDays" :key="day.key" v-bind="day" />
+    <div class="bg-white">
+      <div v-for="row in [0, 1, 2, 3, 4]" :key="`cal_row_${row}`" class="row">
+        <calendar-day
+          v-for="day in monthDaysChunked[row]"
+          :key="day.dayKey"
+          v-bind="day"
+        />
       </div>
     </div>
   </div>
@@ -18,15 +22,19 @@ export default {
     ...mapGetters({
       monthDays: "calendar/currentMonthDays",
     }),
+    monthDaysChunked() {
+      return _.chunk(this.monthDays, 7)
+    },
   },
   mounted() {
     console.log("currentMonthDays", this.currentMonthDays)
   },
+  methods: {
+    // getRow(rowNumber) {
+    //   return this.monthDaysChunked[rowNumber]
+    // }
+  },
 }
 </script>
 
-<style lang="stylus" scoped>
-.rounded-borders-bottom-12
-  border-bottom-right-radius: 12px !important;
-  border-bottom-left-radius: 12px !important;
-</style>
+<style lang="stylus" scoped></style>
