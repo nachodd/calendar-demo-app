@@ -18,13 +18,18 @@
         <span class="emoji">🎉</span>
       </div>
       <div v-else>
+        <div class="row justify-center q-mb-md">
+          <q-btn color="white" outline size="18px" @click="deleteAllReminders">
+            <span class="emoji">❌</span>
+            &nbsp; Delete ALL reminders &nbsp;
+            <span class="emoji">❌</span>
+          </q-btn>
+        </div>
+
         <q-list bordered padding class="bg-white text-black rounded-borders-12">
           <q-item
             v-for="event in events"
             :key="`event_${event.timestamp.getTime()}`"
-            v-ripple
-            clickable
-            @click="editReminder(event)"
           >
             <q-item-section
               avatar
@@ -57,6 +62,18 @@
                   Sorry, no forecast information!
                 </div>
               </q-item-label>
+            </q-item-section>
+
+            <q-item-section side>
+              <span class="emoji cursor-pointer" @click="editReminder(event)">
+                ✏️
+              </span>
+            </q-item-section>
+
+            <q-item-section side>
+              <span class="emoji cursor-pointer" @click="deleteReminder(event)">
+                ❌
+              </span>
             </q-item-section>
 
             <q-item-section side top>
@@ -121,6 +138,13 @@ export default {
     },
     editReminder(event) {
       this.$store.dispatch("calendar/editEvent", event)
+    },
+    deleteReminder(event) {
+      this.$store.dispatch("calendar/deleteEvent", event)
+    },
+    deleteAllReminders() {
+      this.$store.dispatch("calendar/deleteAllReminders")
+      this.$root.$emit("redraw_event", this.selectedDate)
     },
   },
 }

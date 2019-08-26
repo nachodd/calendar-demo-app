@@ -19,6 +19,10 @@ export function SET_MODAL_EVENT_OPEN(state, newVal) {
   state.modalEventOpen = newVal
 }
 
+export function SET_EVENT_SELECTED(state, event) {
+  state.eventSelected = event
+}
+
 export function SAVE_REMINDER(
   state,
   { reminder, city, time, color, weather, parsedSelectedDate, timestamp },
@@ -55,10 +59,37 @@ export function SAVE_REMINDER(
     reminderObject.color = color
     reminderObject.weather = weather
   }
+
+  // force getter eventsForSelectedDate to refresh:
+  const aux = state.selectedDate
+  state.selectedDate = null
+  state.selectedDate = aux
+
   state.eventSelected = null
 }
 
 export function EDIT_EVENT(state, event) {
   state.eventSelected = event
   state.modalEventOpen = true
+}
+
+export function DELETE_EVENT(state, { timestamp }) {
+  const index = _.findIndex(state.events[state.selectedDate], r => {
+    return r.timestamp === timestamp
+  })
+  state.events[state.selectedDate].splice(index, 1)
+
+  // force getter eventsForSelectedDate to refresh:
+  const aux = state.selectedDate
+  state.selectedDate = null
+  state.selectedDate = aux
+}
+
+export function DELETE_ALL_REMINDERS(state) {
+  state.events[state.selectedDate] = []
+
+  // force getter eventsForSelectedDate to refresh:
+  const aux = state.selectedDate
+  state.selectedDate = null
+  state.selectedDate = aux
 }

@@ -187,7 +187,7 @@ export default {
       try {
         const valid = await this.$refs.form.validate()
         if (valid) {
-          this.$store.dispatch("calendar/saveReminder", {
+          await this.$store.dispatch("calendar/saveReminder", {
             reminder: this.reminder,
             city: this.city,
             time: this.time,
@@ -195,8 +195,8 @@ export default {
             weather: this.weather,
             timestamp: this.timestamp,
           })
+          this.$store.dispatch("calendar/setEventSelected", null)
           this.$root.$emit("redraw_event", this.selectedDate)
-
           this.cancel()
         }
       } catch (ex) {
@@ -217,10 +217,7 @@ export default {
       this.weatherMsg = null
       this.$refs.form.resetValidation()
 
-      // force getter eventsForSelectedDate to refresh:
-      const auxSelectedDate = this.selectedDate
-      this.$store.dispatch("calendar/selectDate", null)
-      this.$store.dispatch("calendar/selectDate", auxSelectedDate)
+      this.$store.dispatch("calendar/setEventSelected", null)
     },
     debounceGetWeather: _.debounce(async function() {
       if (this.city.length >= 3) {
