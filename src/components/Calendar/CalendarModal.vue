@@ -11,7 +11,7 @@
           <q-toolbar-title>
             <div class="text-h6">{{ reminderTitle }}</div>
             <div class="text-subtitle2 text-white-7">
-              {{ parsedDate }}
+              {{ parsedDateFH }}
             </div>
           </q-toolbar-title>
         </q-toolbar>
@@ -41,13 +41,30 @@
             label="Where? (put name of the CITY)"
             color="deep-purple-10"
             :rules="[val => !!val.length || 'Please write the name of a city']"
+            @input="debounceGetWeather"
           />
+          <q-banner
+            rounded
+            class="bg-deep-purple-10 text-white text-center"
+            style="height: 70px; opacity: 0.75"
+          >
+            <div class="text-caption text-gray-4">
+              {{ weatherDisplayMsg }}
+              <img
+                v-if="weather && weather.iconUrl"
+                :src="weather.iconUrl"
+                style="vertical-align: middle;"
+              />
+            </div>
+          </q-banner>
+
           <br />
 
           <q-input
             v-model="time"
             outlined
             mask="time"
+            color="deep-purple-10"
             label="Select the time clicking on the Clock:"
             :rules="[val => !!val.length || 'Please specify a Time!', 'time']"
           >
@@ -88,7 +105,7 @@
       <q-footer elevated class="bg-white">
         <q-card-actions align="right">
           <q-btn flat label="Cancel" color="red" @click="cancel" />
-          <q-btn label="Save" color="deep-purple-10" @click="save" />
+          <q-btn :label="buttonText" color="deep-purple-10" @click="save" />
         </q-card-actions>
       </q-footer>
     </q-layout>
@@ -97,6 +114,7 @@
 
 <script>
 import { mapState, mapGetters } from "vuex"
+import { getWeather } from "src/api/weather"
 export default {
   name: "CalendarModal",
   data() {
@@ -105,20 +123,34 @@ export default {
       city: "",
       time: "",
       color: "",
+      weather: null,
+      timestamp: null,
+      weatherMsg: null,
+      processing: false,
     }
   },
   computed: {
     ...mapState("calendar", {
       eventSelected: state => state.eventSelected,
+      selectedDate: state => state.selectedDate,
     }),
     ...mapGetters({
-      parsedDate: "calendar/parsedSelectedDate",
+      parsedDateFH: "calendar/parsedSelectedDateForHumans",
+      parsedSelectedDate: "calendar/parsedSelectedDate",
     }),
     editEvent() {
       return !!this.eventSelected
     },
     reminderTitle() {
       return this.editEvent ? "Edit Reminder" : "New Reminder"
+    },
+    buttonText() {
+      return this.editEvent ? "Edit" : "Save"
+    },
+    weatherDisplayMsg() {
+      return this.weatherMsg === null
+        ? "Type the city name to show the forecast..."
+        : this.weatherMsg
     },
     modalEventOpen: {
       get() {
@@ -131,18 +163,42 @@ export default {
       },
     },
   },
-  mounted() {
-    if (this.eventSelected) {
-      this.reminder = this.eventSelected.reminder
-      this.city = this.eventSelected.city
-      this.time = this.eventSelected.time
-      this.color = this.eventSelected.color
-    }
+  watch: {
+    eventSelected(val) {
+      if (val) {
+        this.reminder = val.reminder
+        this.city = val.city
+        this.time = val.time
+        this.color = val.color
+        this.weather = val.weather
+        this.timestamp = val.timestamp
+      } else {
+        this.reminder = ""
+        this.city = ""
+        this.time = ""
+        this.color = ""
+        this.weather = null
+        this.timestamp = null
+      }
+    },
   },
   methods: {
     async save() {
       try {
-        await this.$refs.form.validate()
+        const valid = await this.$refs.form.validate()
+        if (valid) {
+          this.$store.dispatch("calendar/saveReminder", {
+            reminder: this.reminder,
+            city: this.city,
+            time: this.time,
+            color: this.color,
+            weather: this.weather,
+            timestamp: this.timestamp,
+          })
+          this.$root.$emit("redraw_event", this.selectedDate)
+
+          this.cancel()
+        }
       } catch (ex) {
         this.$q.notify({
           icon: "error",
@@ -157,9 +213,37 @@ export default {
       this.city = ""
       this.time = ""
       this.color = ""
+      this.weather = null
+      this.weatherMsg = null
       this.$refs.form.resetValidation()
+
+      // force getter eventsForSelectedDate to refresh:
+      const auxSelectedDate = this.selectedDate
+      this.$store.dispatch("calendar/selectDate", null)
+      this.$store.dispatch("calendar/selectDate", auxSelectedDate)
     },
+    debounceGetWeather: _.debounce(async function() {
+      if (this.city.length >= 3) {
+        try {
+          this.processing = true
+          this.weather = await getWeather({
+            city: this.city,
+            time: this.parsedSelectedDate.getTime() / 1000,
+          })
+
+          this.weatherMsg = `Forecast: ${this.weather.desc}
+            / T.Max: ${this.weather.tempMax}°C
+            - T.Min: ${this.weather.tempMin}°C`
+        } catch (ex) {
+          this.weather = null
+          this.weatherMsg = "Could not get the forecast for the city"
+        } finally {
+          this.processing = false
+        }
+      }
+    }, 2000),
   },
+  // async getWeatherFn() {},
 }
 </script>
 

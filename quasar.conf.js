@@ -53,6 +53,7 @@ module.exports = function(ctx) {
         "QColor",
         "QPopupProxy",
         "QForm",
+        "QBanner",
       ],
 
       directives: ["Ripple"],

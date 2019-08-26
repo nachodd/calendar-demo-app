@@ -18,25 +18,49 @@
         <span class="emoji">🎉</span>
       </div>
       <div v-else>
-        Events!
-
-        <q-list bordered padding>
-          <q-item>
-            <q-item-section top avatar>
-              <q-avatar color="primary" text-color="white" icon="bluetooth" />
+        <q-list bordered padding class="bg-white text-black rounded-borders-12">
+          <q-item
+            v-for="event in events"
+            :key="`event_${event.timestamp.getTime()}`"
+            v-ripple
+            clickable
+            @click="editReminder(event)"
+          >
+            <q-item-section
+              avatar
+              class="avatar-forecast"
+              :style="{ 'background-color': `${event.color}` }"
+            >
+              <img
+                v-if="event.weather && event.weather.iconUrl"
+                :src="event.weather.iconUrl"
+              />
+              <span v-else class="emoji" style="padding-left: 10px">🤷🏻‍</span>
             </q-item-section>
 
             <q-item-section>
-              <q-item-label>Single line item</q-item-label>
-              <q-item-label caption lines="2">
-                Secondary line text. Lorem ipsum dolor sit amet, consectetur
-                adipiscit elit.
+              <q-item-label class="text-weight-bold">
+                <span
+                  class="dot"
+                  :style="{ 'background-color': `${event.color}` }"
+                >
+                  &nbsp;
+                </span>
+                {{ event.reminder }}
+              </q-item-label>
+              <q-item-label caption>
+                <div class="q-mb-xs">City: {{ event.city }}</div>
+                <div v-if="event.weather">
+                  {{ getForecastText(event.weather) }}
+                </div>
+                <div v-else class="text-italic">
+                  Sorry, no forecast information!
+                </div>
               </q-item-label>
             </q-item-section>
 
             <q-item-section side top>
-              <q-item-label caption>5 min ago</q-item-label>
-              <q-icon name="star" color="yellow" />
+              <q-item-label caption>{{ event.time }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -64,14 +88,26 @@ export default {
       selectedDate: state => state.selectedDate,
     }),
     ...mapGetters({
-      events: "calendar/eventsForSelectedDate",
-      parsedDate: "calendar/parsedSelectedDate",
+      eventsForDate: "calendar/eventsForDate",
+      parsedDate: "calendar/parsedSelectedDateForHumans",
     }),
+    events() {
+      return _.orderBy(
+        this.eventsForDate(this.selectedDate),
+        "timestamp",
+        "asc",
+      )
+    },
   },
   methods: {
     ...mapActions({
       modalEventOpen: "calendar/modalEventOpen",
     }),
+    getForecastText(weather) {
+      return `Forecast: ${weather.desc}
+            / T.Max: ${weather.tempMax}°C
+            - T.Min: ${weather.tempMin}°C`
+    },
     createReminder() {
       if (!this.selectedDate) {
         this.$q.notify({
@@ -83,8 +119,19 @@ export default {
       }
       this.modalEventOpen(true)
     },
+    editReminder(event) {
+      this.$store.dispatch("calendar/editEvent", event)
+    },
   },
 }
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+.avatar-forecast
+  width 50px
+  height 50px
+  border-radius 10px
+  align-self center
+  margin-right 5px
+  border 1px dashed black
+</style>

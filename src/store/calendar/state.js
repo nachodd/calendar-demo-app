@@ -1,7 +1,7 @@
 export default {
   currentDate: new Date(),
   selectedDate: null,
-  events: [],
+  events: localStorage.getItem("events") || [],
   modalEventOpen: false,
   eventSelected: null,
 }
