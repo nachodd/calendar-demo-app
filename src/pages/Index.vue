@@ -1,6 +1,5 @@
 <template>
-  <!-- flex-center -->
-  <q-page class="flex ">
+  <q-page class="flex flex-center">
     <calendar />
   </q-page>
 </template>
