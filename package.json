@@ -1,7 +1,7 @@
 {
-  "name": "calendar-jobsity",
+  "name": "calendar-demo-app",
   "version": "0.0.1",
-  "description": "Front-end Javascript Challenge for Jobsity",
+  "description": "Front-end Calendar App made in Vue",
   "productName": "calendar",
   "cordovaId": "org.cordova.quasar.app",
   "author": "Ignacio Durand <nachodurand@gmail.com>",

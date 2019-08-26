@@ -1,6 +1,6 @@
-# calendar (calendar-jobsity)
+# calendar-demo-app
 
-Front-end Javascript Challenge for Jobsity
+Front-end Calendar App made in Vue
 
 ## Install the dependencies
 ```bash

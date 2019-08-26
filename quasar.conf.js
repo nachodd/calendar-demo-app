@@ -109,7 +109,7 @@ module.exports = function(ctx) {
       manifest: {
         // name: 'calendar',
         // short_name: 'calendar',
-        // description: 'Front-end Javascript Challenge for Jobsity',
+        // description: 'Front-end Calendar App made in Vue',
         display: "standalone",
         orientation: "portrait",
         background_color: "#ffffff",
@@ -170,7 +170,7 @@ module.exports = function(ctx) {
 
       builder: {
         // https://www.electron.build/configuration/configuration
-        // appId: 'calendar-jobsity'
+        // appId: 'calendar-demo-app'
       },
     },
   }
